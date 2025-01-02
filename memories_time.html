@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leandro & Ingrid</title>
+    <link rel="icon" href="images/heart256_icon-icons.com_76061.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: url('./images/velaris2.jpg') no-repeat center center fixed; 
+            background-size: cover;
+            color: white;
+            overflow: hidden;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Carrossel */
+        .gallery {
+            --d: 10s; /* duração da animação */
+            display: grid;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            place-items: center;
+            position: relative;
+        }
+
+        .gallery > img {
+            grid-area: 1/1;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 10px solid #f2f2f2;
+            box-shadow: 0 0 4px #0007;
+            z-index: 2;
+            animation: 
+                slide var(--d) infinite,
+                z-order var(--d) infinite steps(1);
+        }
+
+        .gallery img:last-child {
+            animation-name: slide, z-order-last;
+        }
+
+        @keyframes slide {
+            0%,
+            100% {transform: translateX(0%) rotate(0deg);}
+            50% {transform: translateX(120%) rotate(10deg);}
+        }
+
+        @keyframes z-order {
+            0% {z-index: 1;}
+            50% {z-index: 2;}
+            100% {z-index: 1;}
+        }
+
+        @keyframes z-order-last {
+            0% {z-index: 2;}
+            50% {z-index: 1;}
+            100% {z-index: 2;}
+        }
+
+        /* Imagens desorganizadas */
+        .stacked-images {
+            position: relative;
+            margin: 20px auto;
+            width: 300px;
+            height: 200px;
+        }
+
+        .stacked-images img {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 5px solid #f2f2f2;
+            box-shadow: 0 0 4px #0007;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .stacked-images img:nth-child(1) { top: 10px; left: 30px; transform: rotate(-10deg); }
+        .stacked-images img:nth-child(2) { top: 30px; left: 110px; transform: rotate(15deg); }
+        .stacked-images img:nth-child(3) { top: 50px; left: 190px; transform: rotate(-5deg); }
+        .stacked-images img:nth-child(4) { top: 70px; left: 70px; transform: rotate(10deg); }
+        .stacked-images img:nth-child(5) { top: 90px; left: 150px; transform: rotate(-15deg); }
+
+        .timer {
+            font-size: 2em;
+            margin-top: 30px;
+            color: white;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5), 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        .timer span {
+            font-weight: bold;
+        }
+
+        .neon {
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .subtext {
+            margin-top: 10px;
+            font-size: 1.5em;
+            font-style: italic;
+            color: white;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="content">
+        <h1>EU AMO VOCÊ A...</h1>
+        
+        <!-- Carrossel -->
+        <div class="gallery">
+            <img src="images/foto1.png" alt="1">
+            <img src="images/foto2.png" alt="2">
+            <img src="images/foto3.png" alt="3">
+            <img src="images/foto4.png" alt="4">
+            <img src="images/foto5.png" alt="5">
+            <img src="images/foto6.png" alt="5">
+            <img src="images/foto7.png" alt="5">
+        </div>
+        
+        <!-- Imagens desorganizadas -->
+        <div class="stacked-images">
+            <img src="images/foto1.png" alt="1">
+            <img src="images/foto2.png" alt="2">
+            <img src="images/foto3.png" alt="3">
+            <img src="images/foto4.png" alt="4">
+            <img src="images/foto5.png" alt="5">
+        </div>
+
+        <div class="timer neon" id="timer">Carregando...</div>
+        <div class="subtext">Ao seu lado e contando.</div>
+    </div>
+
+    <script>
+        function updateTimer(startDate) {
+            const now = new Date();
+            const diff = now - startDate;
+
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+            const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
+            const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('timer').innerHTML = `
+                <span>${years}</span> anos, 
+                <span>${months}</span> meses, 
+                <span>${days}</span> dias, 
+                <span>${hours}</span> horas, 
+                <span>${minutes}</span> minutos e 
+                <span>${seconds}</span> segundos
+            `;
+        }
+
+        const startDate = new Date('2018-07-18T00:00:00');
+        setInterval(() => updateTimer(startDate), 1000);
+    </script>
+</body>
+</html>
